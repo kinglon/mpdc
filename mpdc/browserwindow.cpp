@@ -1,0 +1,64 @@
+﻿#include "browserwindow.h"
+#include "ui_browserwindow.h"
+#include <QImage>
+#include <QWebEngineSettings>
+#include "Utility/ImPath.h"
+
+BrowserWindow::BrowserWindow(QWidget *parent) :
+    QMainWindow(parent),
+    m_webView(new QWebEngineView(this))
+{
+    setWindowTitle(QString::fromStdWString(L"浏览器"));
+    m_webView->resize(m_webViewSize);
+    setWindowState(windowState() | Qt::WindowMaximized);
+    connect(m_webView->page(), &QWebEnginePage::loadFinished,this, &BrowserWindow::onLoadFinished);
+}
+
+BrowserWindow::~BrowserWindow()
+{
+
+}
+
+BrowserWindow* BrowserWindow::getInstance()
+{
+    static BrowserWindow* instance = new BrowserWindow();
+    return instance;
+}
+
+void BrowserWindow::load(const QUrl& url)
+{
+    m_webView->load(url);
+}
+
+bool BrowserWindow::captrueImage(const QString& savePath)
+{
+    // 如果最小化就最大化展示，因为最小化时捕获不到图片
+    if (isMinimized())
+    {
+        showMaximized();
+    }
+
+    // 截屏
+    QImage image(m_webView->size(), QImage::Format_ARGB32);
+    QPainter painter(&image);
+    m_webView->render(&painter);
+    painter.end();
+    return image.save(savePath);
+}
+
+void BrowserWindow::onLoadFinished(bool ok)
+{
+    emit loadFinished(ok);
+}
+
+void BrowserWindow::closeEvent(QCloseEvent *event)
+{
+    if (m_canClose)
+    {
+        event->accept();
+    }
+    else
+    {
+        event->ignore();
+    }
+}
