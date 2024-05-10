@@ -1,0 +1,13 @@
+var jsResult = {};
+jsResult['fun'] = 'get_id';
+var userInfos = document.getElementsByClassName('mZmVWLzR');
+if (userInfos.length > 0)
+{
+    var douyinIds = userInfos[0].getElementsByClassName('TVGQz3SI');
+    if (douyinIds.length > 0)
+    {
+        var douyin = douyinIds[0].textContent.slice('抖音号：'.length);
+        jsResult['id'] = douyin;        
+    }
+}
+jsResult;

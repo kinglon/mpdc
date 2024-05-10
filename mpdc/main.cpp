@@ -14,6 +14,15 @@ void logToFile(QtMsgType type, const QMessageLogContext &context, const QString 
 {
     if (g_dllLog)
     {
+        // 未启用浏览器日志，过滤掉
+        if (!CSettingManager::GetInstance()->m_enableWebviewLog)
+        {
+            if (context.file && QString(context.file).indexOf("http") != -1)
+            {
+                return;
+            }
+        }
+
         ELogLevel logLevel = ELogLevel::LOG_LEVEL_ERROR;
         if (type == QtMsgType::QtDebugMsg)
         {
@@ -44,10 +53,11 @@ int main(int argc, char *argv[])
 
     g_dllLog = CLogUtil::GetLog(L"main");
 
-    //初始化崩溃转储机制
+    // 初始化崩溃转储机制
     CDumpUtil::SetDumpFilePath(CImPath::GetDumpPath().c_str());
     CDumpUtil::Enable(true);
 
+    // 设置日志级别
     int nLogLevel = CSettingManager::GetInstance()->m_nLogLevel;
     g_dllLog->SetLogLevel((ELogLevel)nLogLevel);
     originalHandler = qInstallMessageHandler(logToFile);

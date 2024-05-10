@@ -24,6 +24,8 @@ private slots:
 
     void onEnableBtnlicked(bool checked);
 
+    void onRunJsCodeFinish(const QVariant& result);
+
 private:
     Ui::DebugDialog *ui;
 };

@@ -19,4 +19,10 @@ private:
 
 public:
     int m_nLogLevel = 2;  // debug
+
+    // 是否启用webview日志输出
+    bool m_enableWebviewLog = false;
+
+    // 标志是否要缓存JS代码，false会实时从本地文件加载
+    bool m_cacheJsCode = true;
 };

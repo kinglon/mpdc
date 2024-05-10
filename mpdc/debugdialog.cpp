@@ -17,6 +17,9 @@ DebugDialog::DebugDialog(QWidget *parent) :
     connect(ui->runJSBtn, &QPushButton::clicked, this, &DebugDialog::onRunJsBtnClicked);
     connect(ui->captureBtn, &QPushButton::clicked, this, &DebugDialog::onCaptureBtnlicked);
     connect(ui->enableBtn, &QPushButton::clicked, this, &DebugDialog::onEnableBtnlicked);
+
+    connect(BrowserWindow::getInstance(), &BrowserWindow::runJsCodeFinished,
+            this, &DebugDialog::onRunJsCodeFinish);
 }
 
 DebugDialog::~DebugDialog()
@@ -37,6 +40,12 @@ void DebugDialog::onLoadBtnClicked(bool checked)
 void DebugDialog::onRunJsBtnClicked(bool checked)
 {
     (void)checked;
+    QString jsCode = ui->jsCodeEdit->toPlainText();
+    if (jsCode.isEmpty())
+    {
+        return;
+    }
+    BrowserWindow::getInstance()->runJsCode(jsCode);
 }
 
 void DebugDialog::onCaptureBtnlicked(bool checked)
@@ -58,3 +67,26 @@ void DebugDialog::onEnableBtnlicked(bool checked)
     (void)checked;
     BrowserWindow::getInstance()->setEnabled(true);
 }
+
+void DebugDialog::onRunJsCodeFinish(const QVariant& result)
+{
+    if (result.type() == QVariant::String)
+    {
+        ui->jsResultEdit->setText(result.toString());
+        return;
+    }
+
+    if (result.type() == QVariant::Map)
+    {
+        QString text;
+        QMap map = result.toMap();
+        QList<QString> keys = map.keys();
+        for (QString key : keys)
+        {
+            text += key + "=" + map[key].toString() + "\n";
+        }
+        ui->jsResultEdit->setText(text);
+        return;
+    }
+}
+

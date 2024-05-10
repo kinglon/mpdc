@@ -8,6 +8,7 @@ BrowserWindow::BrowserWindow(QWidget *parent) :
     QMainWindow(parent),
     m_webView(new QWebEngineView(this))
 {
+    setEnabled(false);
     setWindowTitle(QString::fromStdWString(L"浏览器"));
     m_webView->resize(m_webViewSize);
     setWindowState(windowState() | Qt::WindowMaximized);
@@ -43,7 +44,22 @@ bool BrowserWindow::captrueImage(const QString& savePath)
     QPainter painter(&image);
     m_webView->render(&painter);
     painter.end();
-    return image.save(savePath);
+    if (!image.save(savePath))
+    {
+        qCritical("failed to save the capturing image to %s", savePath.toStdString().c_str());
+        return false;
+    }
+    else
+    {
+        return true;
+    }
+}
+
+void BrowserWindow::runJsCode(const QString& jsCode)
+{
+    m_webView->page()->runJavaScript(jsCode, [this](const QVariant &result) {
+        emit runJsCodeFinished(result);
+    });
 }
 
 void BrowserWindow::onLoadFinished(bool ok)

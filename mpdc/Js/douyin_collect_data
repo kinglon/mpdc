@@ -1,0 +1,38 @@
+var jsResult = {};
+jsResult['fun'] = 'collect_data';
+jsResult['title'] = document.title;
+var userInfos = document.getElementsByClassName('UbblxGZr');
+if (userInfos.length > 0)
+{
+    var nickNames = userInfos[0].getElementsByClassName('j5WZzJdp');
+    if (nickNames.length > 0)
+    {
+        var nickName = nickNames[0];
+        for (var i=0; i<4; i++)
+        {
+            if (nickName)
+            {
+                nickName = nickName.firstChild;
+            }
+        }        
+        if (nickName)
+        {
+            jsResult['nickName'] = nickName.textContent;
+        }        
+    }
+    var fanCounts = userInfos[0].getElementsByClassName('KtZzcbT8');
+    if (fanCounts.length > 0 && fanCounts[0].children.length >= 2)    
+    {
+        jsResult['fanCount'] = fanCounts[0].children[1].textContent;
+    }
+    var userLinks = userInfos[0].getElementsByClassName('WdX5lXbX');
+    if (userLinks.length > 0)
+    {
+        userLinks = userLinks[0].getElementsByTagName('a');
+        if (userLinks.length > 0)
+        {
+            jsResult['userLink'] = userLinks[0].href;
+        }
+    }
+}
+jsResult;

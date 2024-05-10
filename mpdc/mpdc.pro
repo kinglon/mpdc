@@ -16,7 +16,11 @@ SOURCES += \
     Utility/LogBuffer.cpp \
     Utility/LogUtil.cpp \
     browserwindow.cpp \
+    ccollectorbase.cpp \
+    collectorfactory.cpp \
+    datamodel.cpp \
     debugdialog.cpp \
+    douyincollector.cpp \
     main.cpp \
     mainwindow.cpp \
     settingmanager.cpp
@@ -30,7 +34,11 @@ HEADERS += \
     Utility/LogMacro.h \
     Utility/LogUtil.h \
     browserwindow.h \
+    ccollectorbase.h \
+    collectorfactory.h \
+    datamodel.h \
     debugdialog.h \
+    douyincollector.h \
     mainwindow.h \
     settingmanager.h
 
@@ -39,7 +47,7 @@ FORMS += \
     debugdialog.ui \
     mainwindow.ui
 
-# Default rules for deployment.
-qnx: target.path = /tmp/$${TARGET}/bin
-else: unix:!android: target.path = /opt/$${TARGET}/bin
-!isEmpty(target.path): INSTALLS += target
+# Enable PDB generation
+QMAKE_CFLAGS_RELEASE += /Zi
+QMAKE_CXXFLAGS_RELEASE += /Zi
+QMAKE_LFLAGS_RELEASE += /DEBUG

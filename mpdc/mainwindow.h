@@ -28,6 +28,9 @@ protected:
     void closeEvent(QCloseEvent *event) override;
 
 private:
+    void AddCollectLog(const QString& log);
+
+private:
     Ui::MainWindow* ui;
 
     // CTRL+D快捷键
