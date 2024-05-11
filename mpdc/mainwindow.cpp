@@ -3,6 +3,13 @@
 #include "browserwindow.h"
 #include "debugdialog.h"
 #include "collectorfactory.h"
+#include "xlsxdocument.h"
+#include "xlsxchartsheet.h"
+#include "xlsxcellrange.h"
+#include "xlsxchart.h"
+#include "xlsxrichstring.h"
+#include "xlsxworkbook.h"
+using namespace QXlsx;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)

@@ -51,3 +51,12 @@ FORMS += \
 QMAKE_CFLAGS_RELEASE += /Zi
 QMAKE_CXXFLAGS_RELEASE += /Zi
 QMAKE_LFLAGS_RELEASE += /DEBUG
+
+# QXlsx code for Application Qt project
+QXLSX_PARENTPATH=./QXlsx         # current QXlsx path is . (. means curret directory)
+QXLSX_HEADERPATH=./QXlsx/header/  # current QXlsx header path is ./header/
+QXLSX_SOURCEPATH=./QXlsx/source/  # current QXlsx source path is ./source/
+include(./QXlsx/QXlsx.pri)
+
+INCLUDEPATH += QXLSX_HEADERPATH
+
