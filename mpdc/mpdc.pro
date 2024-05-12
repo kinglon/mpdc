@@ -22,6 +22,7 @@ SOURCES += \
     datamodel.cpp \
     debugdialog.cpp \
     douyincollector.cpp \
+    kuaishoucollector.cpp \
     main.cpp \
     mainwindow.cpp \
     settingmanager.cpp
@@ -41,6 +42,7 @@ HEADERS += \
     datamodel.h \
     debugdialog.h \
     douyincollector.h \
+    kuaishoucollector.h \
     mainwindow.h \
     settingmanager.h
 

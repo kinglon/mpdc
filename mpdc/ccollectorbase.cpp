@@ -271,8 +271,16 @@ void CollectorBase::stepCollectDataFinish(bool ok)
 {
     if (!ok)
     {
-        QString log = QString::fromWCharArray(L"链接%1采集失败：采集不到数据").arg(m_dataModel.m_id);
-        emit collectLog(log);
+        if (m_collectError == COLLECT_ERROR_NOT_LOGIN)
+        {
+            QString log = QString::fromWCharArray(L"链接%1采集失败：未登录").arg(m_dataModel.m_id);
+            emit collectLog(log);
+        }
+        else
+        {
+            QString log = QString::fromWCharArray(L"链接%1采集失败：采集不到数据").arg(m_dataModel.m_id);
+            emit collectLog(log);
+        }
         runFinish(false);
     }
     else

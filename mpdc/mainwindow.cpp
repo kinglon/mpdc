@@ -60,6 +60,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::initWindow()
 {
+    connect(ui->loginKuaiShouBtn, &QPushButton::clicked, this, &MainWindow::onLoginKuaiShouBtnClicked);
     connect(ui->selectPathBtn, &QPushButton::clicked, this, &MainWindow::onSelectPathBtnClicked);
     connect(ui->collectBtn, &QPushButton::clicked, this, &MainWindow::onCollectBtnClicked);
     connect(ui->stopCollectBtn, &QPushButton::clicked, this, &MainWindow::onStopCollectBtnClicked);
@@ -162,9 +163,16 @@ void MainWindow::onCollectBtnClicked(bool )
     updateCollectBtns();
     ui->logEdit->setText("");
 
+    BrowserWindow::getInstance()->setEnabled(false);
     BrowserWindow::getInstance()->showMaximized();
 
     onCollectNextTask();
+}
+
+void MainWindow::onLoginKuaiShouBtnClicked(bool)
+{
+    BrowserWindow::getInstance()->setEnabled(true);
+    BrowserWindow::getInstance()->load(QUrl("https://www.kuaishou.com/"));
 }
 
 void MainWindow::onCtrlDShortcut()

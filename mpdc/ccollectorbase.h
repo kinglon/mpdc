@@ -16,7 +16,8 @@
 
 // 采集失败原因
 #define COLLECT_ERROR                   1
-#define COLLECT_ERROR_NOT_HAVE_VIDEO    2
+#define COLLECT_ERROR_NOT_HAVE_VIDEO    2  // 视频不存在
+#define COLLECT_ERROR_NOT_LOGIN         3  // 未登录
 
 class CollectorBase : public QObject
 {

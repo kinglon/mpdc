@@ -1,0 +1,10 @@
+var jsResult = {};
+jsResult['fun'] = 'collect_data';
+jsResult['title'] = document.title;
+var nickNames = document.getElementsByClassName('profile-user-name-title');
+if (nickNames.length > 0)
+{
+    jsResult['nickName'] = nickNames[0].textContent;
+    nickNames[0].click();
+}
+jsResult;

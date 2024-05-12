@@ -48,6 +48,8 @@ private slots:
 
     void onCollectBtnClicked(bool checked);
 
+    void onLoginKuaiShouBtnClicked(bool checked=false);
+
     void onCtrlDShortcut();
 
     void onCollectNextTask();
