@@ -31,7 +31,7 @@ if (userInfos.length > 0)
         userLinks = userLinks[0].getElementsByTagName('a');
         if (userLinks.length > 0)
         {
-            jsResult['userLink'] = userLinks[0].href;
+            userLinks[0].click();
         }
     }
 }

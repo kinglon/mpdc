@@ -16,7 +16,7 @@
   <property name="modal">
    <bool>true</bool>
   </property>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -38,7 +38,7 @@
       <item>
        <widget class="QLineEdit" name="urlEdit">
         <property name="text">
-         <string>https://www.douyin.com/video/7357208178821500175</string>
+         <string>https://www.kuaishou.com/short-video/3xmnuf55gxez5ca</string>
         </property>
        </widget>
       </item>

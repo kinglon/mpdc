@@ -4,12 +4,29 @@
 #include <QWebEngineSettings>
 #include "Utility/ImPath.h"
 
+QWebEnginePage* WebEnginePage::createWindow(WebWindowType)
+{
+    WebEnginePage *page = new WebEnginePage(this);
+    connect(page, &QWebEnginePage::urlChanged, this, &WebEnginePage::onUrlChanged);
+    return page;
+}
+
+void WebEnginePage::onUrlChanged(const QUrl & url)
+{
+    if (WebEnginePage *page = qobject_cast<WebEnginePage *>(sender()))
+    {
+        load(url);
+        page->deleteLater();
+    }
+}
+
 BrowserWindow::BrowserWindow(QWidget *parent) :
     QMainWindow(parent),
     m_webView(new QWebEngineView(this))
 {
     setEnabled(false);
     setWindowTitle(QString::fromStdWString(L"浏览器"));
+    m_webView->setPage(new WebEnginePage(m_webView));
     m_webView->resize(m_webViewSize);
     setWindowState(windowState() | Qt::WindowMaximized);
     connect(m_webView->page(), &QWebEnginePage::loadFinished,this, &BrowserWindow::onLoadFinished);

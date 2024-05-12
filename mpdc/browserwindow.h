@@ -4,10 +4,25 @@
 #include <QMainWindow>
 #include <QWebEngineView>
 #include <QCloseEvent>
+#include <QWebEnginePage>
 
 namespace Ui {
 class BrowserWindow;
 }
+
+class WebEnginePage: public QWebEnginePage
+{
+    Q_OBJECT
+
+public:
+    using QWebEnginePage::QWebEnginePage;
+
+protected:
+    virtual QWebEnginePage *createWindow(WebWindowType) override;
+
+private Q_SLOTS:
+    void onUrlChanged(const QUrl & url);
+};
 
 class BrowserWindow : public QMainWindow
 {

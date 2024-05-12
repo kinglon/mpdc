@@ -17,6 +17,21 @@
 
 using namespace QXlsx;
 
+void RequestInterceptor::interceptRequest(QWebEngineUrlRequestInfo &info)
+{
+    if (info.resourceType() != QWebEngineUrlRequestInfo::ResourceTypeMainFrame)
+    {
+        return;
+    }
+
+    // 禁止找不到抖音视频，跳转到推荐页面
+    if (info.requestUrl().toString().indexOf("recommend") != -1)
+    {
+        info.block(true);
+        return;
+    }
+}
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -48,6 +63,9 @@ void MainWindow::initWindow()
     connect(ui->selectPathBtn, &QPushButton::clicked, this, &MainWindow::onSelectPathBtnClicked);
     connect(ui->collectBtn, &QPushButton::clicked, this, &MainWindow::onCollectBtnClicked);
     connect(ui->stopCollectBtn, &QPushButton::clicked, this, &MainWindow::onStopCollectBtnClicked);
+    connect(ui->enableBrowserBtn, &QPushButton::clicked, []() {
+        BrowserWindow::getInstance()->setEnabled(true);
+    });
 
     updateCollectBtns();
 }

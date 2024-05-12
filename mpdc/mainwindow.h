@@ -21,19 +21,7 @@ public:
         //
     }
 
-    void interceptRequest(QWebEngineUrlRequestInfo &info)
-    {
-        if (info.resourceType() != QWebEngineUrlRequestInfo::ResourceTypeMainFrame)
-        {
-            return;
-        }
-
-        // 禁止找不到抖音视频，跳转到推荐页面
-        if (info.requestUrl().toString().indexOf("recommend") != -1)
-        {
-            info.block(true);
-        }
-    }
+    void interceptRequest(QWebEngineUrlRequestInfo &info);
 };
 
 class MainWindow : public QMainWindow

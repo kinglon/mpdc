@@ -97,24 +97,6 @@ void DouyinCollector::runJsCodeFinish(bool ok, const QMap<QString, QString>& res
         {
             m_dataModel.m_fanCount = result["fanCount"];
         }
-
-        QString userLink;
-        if (result.contains("userLink"))
-        {
-            userLink = result["userLink"];
-        }
-
-        // 如果没有视频，进入推荐，获取不到用户链接，所以将它当做没有视频
-        if (userLink.isEmpty())
-        {
-            m_collectError = COLLECT_ERROR_NOT_HAVE_VIDEO;
-            qCritical("the user link is empty.");
-            collectDataCompletely(false);
-        }
-        else
-        {
-            BrowserWindow::getInstance()->load(userLink);
-        }
     }
     else if (fun == "get_id")
     {
@@ -132,6 +114,7 @@ void DouyinCollector::onSubClassLoadUrlFinished(bool ok)
     {
         if (ok)
         {
+            // 页面跳转成功，可以去采集用户ID
             if (!runJsCodeFile("douyin_get_id"))
             {
                 collectDataCompletely(false);
