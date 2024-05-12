@@ -64,10 +64,19 @@ protected:
     bool runJsCodeFile(const QString& jsFileName);
 
     // JS脚本执行结果
-    virtual void runJsCodeFinish(bool ok, const QMap<QString, QString>& result) { (void)ok; (void)result;}
+    virtual void runJsCodeFinish(bool ok, const QMap<QString, QString>& result);
 
     // 子类重载，URL加载完成后除非
     virtual void onSubClassLoadUrlFinished(bool ok) {(void)ok;}
+
+    // 获取等待准备就绪的JS脚本文件
+    virtual QString getWaitReadyJsFile() = 0;
+
+    // 检查是否已准备就绪
+    // result, JS代码运行的结果
+    // hasVideo, 标志是否有视频
+    // return， true表示结束，如果有视频继续，没有视频就失败
+    virtual bool isReady(const QMap<QString, QString>& result, bool& hasVideo) = 0;
 
     // 获取截图保存路径
     QString getCaptureImageSavePath();
@@ -75,7 +84,7 @@ protected:
 protected:
     void doStepLoadUrl();
 
-    virtual void doStepWaitReady() = 0;
+    void doStepWaitReady();
 
     void stepWaitReadyFinish(bool ok);
 

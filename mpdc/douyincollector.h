@@ -9,32 +9,25 @@ class DouyinCollector : public CollectorBase
 public:
     explicit DouyinCollector(QObject *parent = nullptr);
 
-public slots:
-    void onWaitReadyTimer();
-
 protected:
     virtual void runJsCodeFinish(bool ok, const QMap<QString, QString>& result) override;
 
     virtual void onSubClassLoadUrlFinished(bool ok) override;
 
-    virtual void doStepWaitReady() override;
+    virtual QString getWaitReadyJsFile() override { return "douyin_check_ready"; }
+
+    virtual bool isReady(const QMap<QString, QString>& result, bool& hasVideo) override;
 
     virtual void doStepCaptureImage() override;
 
     virtual void doStepCollectData() override;
 
 private:
-    void waitReadyCompletely(bool ok);
-
     void captureImageCompletely(bool ok);
 
     void collectDataCompletely(bool ok);
 
 private:
-    QTimer* m_waitReadyTimer = nullptr;
-
-    int m_waitReadyCount = 0;
-
     bool m_hasCaptured = false;
 
     QTimer* m_captureImageTimer = nullptr;

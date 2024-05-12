@@ -4,6 +4,12 @@
 #include "Utility/ImPath.h"
 #include <QDir>
 
+// 加载URL最大重试次数
+#define LOAD_URL_MAX_RETRY_COUNT 1
+
+// 等待就绪状态最大重试次数
+#define WAIT_READY_MAX_RETRY_COUNT 20
+
 CollectorBase::CollectorBase(QObject *parent)
     : QObject{parent},
       m_runJsCodeTimer(new QTimer(this)),
@@ -116,6 +122,26 @@ bool CollectorBase::runJsCodeFile(const QString& jsFileName)
     return runJsCode(jsCode);
 }
 
+void CollectorBase::runJsCodeFinish(bool ok, const QMap<QString, QString>& result)
+{
+    if (m_currentStep == STEP_WAIT_READY)
+    {
+        bool hasVideo = true;
+        if (ok && isReady(result, hasVideo))
+        {
+            if (hasVideo)
+            {
+                stepWaitReadyFinish(true);
+            }
+            else
+            {
+                m_collectError = COLLECT_ERROR_NOT_HAVE_VIDEO;
+                stepWaitReadyFinish(false);
+            }
+        }
+    }
+}
+
 void CollectorBase::onRunJsCodeFinish(const QVariant& result)
 {
     if (m_currentJsSessionId == 0)
@@ -181,13 +207,25 @@ void CollectorBase::doStepLoadUrl()
     BrowserWindow::getInstance()->load(QUrl(m_dataModel.m_link));
 }
 
+void CollectorBase::doStepWaitReady()
+{
+    if (!runJsCodeFile(getWaitReadyJsFile()))
+    {
+        stepWaitReadyFinish(false);
+        return;
+    }
+
+    m_stepTimer->setInterval(2000);
+    m_stepTimer->start();
+}
+
 void CollectorBase::stepWaitReadyFinish(bool ok)
 {
     if (!ok)
     {
         if (m_collectError == COLLECT_ERROR_NOT_HAVE_VIDEO)
         {
-            QString log = QString::fromWCharArray(L"链接%1采集失败：无效视频").arg(m_dataModel.m_id);
+            QString log = QString::fromWCharArray(L"链接%1采集失败：视频不存在").arg(m_dataModel.m_id);
             emit collectLog(log);
         }
         else
@@ -292,7 +330,7 @@ void CollectorBase::onStepTimeout()
 
     if (m_currentStep == STEP_LOADURL)
     {
-        if (m_stepRetryCount < 1) // 重试一次
+        if (m_stepRetryCount < LOAD_URL_MAX_RETRY_COUNT)
         {
             emit collectLog(QString::fromWCharArray(L"加载链接超时，重试"));
             doStepLoadUrl();
@@ -303,6 +341,18 @@ void CollectorBase::onStepTimeout()
             QString log = QString::fromWCharArray(L"链接%1采集失败：加载链接超时").arg(m_dataModel.m_id);
             emit collectLog(log);
             emit runFinish(false);
+        }
+    }
+    else if (m_currentStep == STEP_WAIT_READY)
+    {
+        if (m_stepRetryCount < WAIT_READY_MAX_RETRY_COUNT)
+        {
+            doStepWaitReady();
+            m_stepRetryCount++;
+        }
+        else
+        {
+            stepWaitReadyFinish(false);
         }
     }
 }

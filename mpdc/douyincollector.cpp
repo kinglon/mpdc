@@ -1,7 +1,6 @@
 ﻿#include "douyincollector.h"
 #include "browserwindow.h"
 
-#define MAX_WAIT_READY_COUNT    20
 
 DouyinCollector::DouyinCollector(QObject *parent)
     : CollectorBase{parent}
@@ -9,25 +8,10 @@ DouyinCollector::DouyinCollector(QObject *parent)
 
 }
 
-void DouyinCollector::onWaitReadyTimer()
-{
-    if (m_waitReadyCount >= MAX_WAIT_READY_COUNT)
-    {
-        waitReadyCompletely(false);
-        return;
-    }
-
-    if (!runJsCodeFile("douyin_check_ready"))
-    {
-        waitReadyCompletely(false);
-        return;
-    }
-
-    m_waitReadyCount++;
-}
-
 void DouyinCollector::runJsCodeFinish(bool ok, const QMap<QString, QString>& result)
 {
+    __super::runJsCodeFinish(ok, result);
+
     if (!ok)
     {
         return;
@@ -44,22 +28,7 @@ void DouyinCollector::runJsCodeFinish(bool ok, const QMap<QString, QString>& res
         return;
     }
 
-    if (fun == "check_ready")
-    {
-        if (result.contains("ready"))
-        {
-            if (result["ready"] == "1") // 就绪
-            {
-                waitReadyCompletely(true);
-            }
-            else if (result["ready"] == "2") // 没有视频
-            {
-                m_collectError = COLLECT_ERROR_NOT_HAVE_VIDEO;
-                waitReadyCompletely(false);
-            }
-        }
-    }
-    else if (fun == "close_login_window")
+    if (fun == "close_login_window")
     {
         if (!m_hasCaptured || (result.contains("login_window_visible") && result["login_window_visible"] == "1"))
         {
@@ -124,12 +93,37 @@ void DouyinCollector::onSubClassLoadUrlFinished(bool ok)
     }
 }
 
-void DouyinCollector::doStepWaitReady()
+bool DouyinCollector::isReady(const QMap<QString, QString>& result, bool& hasVideo)
 {
-    m_waitReadyTimer = new QTimer(this);
-    connect(m_waitReadyTimer, &QTimer::timeout, this, &DouyinCollector::onWaitReadyTimer);
-    m_waitReadyTimer->setInterval(2000);
-    m_waitReadyTimer->start();
+    QString fun;
+    if (result.contains("fun"))
+    {
+        fun = result["fun"];
+    }
+    if (fun.isEmpty())
+    {
+        qCritical("js result not have fun");
+        return false;
+    }
+
+    if (fun == "check_ready")
+    {
+        if (result.contains("ready"))
+        {
+            if (result["ready"] == "1") // 就绪
+            {
+                hasVideo = true;
+                return true;
+            }
+            else if (result["ready"] == "2") // 没有视频
+            {
+                hasVideo = false;
+                return true;
+            }
+        }
+    }
+
+    return false;
 }
 
 void DouyinCollector::doStepCaptureImage()
@@ -164,14 +158,6 @@ void DouyinCollector::doStepCollectData()
     });
     m_collectDataTimer->setInterval(60000);
     m_collectDataTimer->start();
-}
-
-void DouyinCollector::waitReadyCompletely(bool ok)
-{
-    m_waitReadyTimer->stop();
-    m_waitReadyTimer->deleteLater();
-    m_waitReadyTimer = nullptr;
-    stepWaitReadyFinish(ok);
 }
 
 void DouyinCollector::captureImageCompletely(bool ok)
