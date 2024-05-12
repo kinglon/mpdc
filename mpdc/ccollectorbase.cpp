@@ -10,11 +10,25 @@ CollectorBase::CollectorBase(QObject *parent)
       m_stepTimer(new QTimer(this))
 {
     connect(BrowserWindow::getInstance(), &BrowserWindow::runJsCodeFinished,
-            this, &CollectorBase::onRunJsCodeFinish);
+            this, &CollectorBase::onRunJsCodeFinish);    
+
     m_runJsCodeTimer->setInterval(m_runJsCodeTimeout);
     connect(m_runJsCodeTimer, &QTimer::timeout, this, &CollectorBase::onRunJsCodeTimeout);
     connect(m_stepTimer, &QTimer::timeout, this, &CollectorBase::onStepTimeout);
     connect(BrowserWindow::getInstance(), &BrowserWindow::loadFinished, this, &CollectorBase::onLoadUrlFinished);
+}
+
+QString CollectorBase::getCollectResultSavePath(QString planName)
+{
+    std::wstring dataPath = CImPath::GetDataPath();
+    QString qDataPath = QString::fromStdWString(dataPath);
+    qDataPath += planName + "\\";
+    if (!QDir(qDataPath).exists())
+    {
+      QDir().mkdir(qDataPath);
+    }
+
+    return qDataPath;
 }
 
 void CollectorBase::run()
@@ -25,13 +39,13 @@ void CollectorBase::run()
         return;
     }
 
-    if (m_dataSaveFolderName.isEmpty())
+    if (m_planName.isEmpty())
     {
         qCritical("the data folder is not setted");
         return;
     }
 
-    QString log = QString::fromWCharArray(L"开始采集链接") + m_dataModel.m_id;
+    QString log = QString::fromWCharArray(L"链接%1采集开始").arg(m_dataModel.m_id);
     emit collectLog(log);
 
     m_currentStep = STEP_LOADURL;
@@ -133,10 +147,17 @@ void CollectorBase::onRunJsCodeFinish(const QVariant& result)
 
     QMap<QString, QString> newMap;
     QList<QString> keys = map.keys();
+    QString jsResultStr;
     for (QString key : keys)
     {
         newMap[key] = map[key].toString();
+        if (!jsResultStr.isEmpty())
+        {
+            jsResultStr += ", ";
+        }
+        jsResultStr += key + "=" + newMap[key];
     }
+    qInfo("js result: %s", jsResultStr.toStdString().c_str());
     runJsCodeFinish(true, newMap);
 }
 
@@ -149,15 +170,8 @@ void CollectorBase::onRunJsCodeTimeout()
 }
 
 QString CollectorBase::getCaptureImageSavePath()
-{
-    std::wstring dataPath = CImPath::GetDataPath();
-    QString qDataPath = QString::fromStdWString(dataPath);
-    qDataPath += m_dataSaveFolderName + "\\";
-    if (!QDir(qDataPath).exists())
-    {
-      QDir().mkdir(qDataPath);
-    }
-    return qDataPath + m_dataModel.m_id + ".png";
+{    
+    return getCollectResultSavePath(m_planName) + m_dataModel.m_id + ".png";
 }
 
 void CollectorBase::doStepLoadUrl()
@@ -173,7 +187,8 @@ void CollectorBase::stepWaitReadyFinish(bool ok)
     {
         if (m_collectError == COLLECT_ERROR_NOT_HAVE_VIDEO)
         {
-            emit collectLog(QString::fromWCharArray(L"无效视频"));
+            QString log = QString::fromWCharArray(L"链接%1采集失败：无效视频").arg(m_dataModel.m_id);
+            emit collectLog(log);
         }
         else
         {
@@ -201,7 +216,8 @@ void CollectorBase::stepCaptureImageFinish(bool ok)
 {
     if (!ok)
     {
-        emit collectLog(QString::fromWCharArray(L"截图失败"));
+        QString log = QString::fromWCharArray(L"链接%1采集失败：截图失败").arg(m_dataModel.m_id);
+        emit collectLog(log);
         runFinish(false);
     }
     else
@@ -217,14 +233,16 @@ void CollectorBase::stepCollectDataFinish(bool ok)
 {
     if (!ok)
     {
-        emit collectLog(QString::fromWCharArray(L"采集数据失败"));
+        QString log = QString::fromWCharArray(L"链接%1采集失败：采集不到数据").arg(m_dataModel.m_id);
+        emit collectLog(log);
         runFinish(false);
     }
     else
     {
         m_currentStep = STEP_FINISH;
         m_stepRetryCount = 0;
-        emit collectLog(QString::fromWCharArray(L"采集完毕"));
+        QString log = QString::fromWCharArray(L"链接%1采集完成").arg(m_dataModel.m_id);
+        emit collectLog(log);
         runFinish(true);
     }
 }
@@ -235,6 +253,13 @@ void CollectorBase::onLoadUrlFinished(bool ok)
 
     if (m_currentStep == STEP_LOADURL)
     {
+        QString currentUrl = BrowserWindow::getInstance()->getUrl();
+        if (currentUrl.indexOf(m_dataModel.m_link) == -1)
+        {
+            qInfo("ignore the jump url: %s", currentUrl.toStdString().c_str());
+            return;
+        }
+
         m_stepTimer->stop();
         if (!ok)
         {
@@ -242,10 +267,12 @@ void CollectorBase::onLoadUrlFinished(bool ok)
             {
                 emit collectLog(QString::fromWCharArray(L"加载链接失败，重试"));
                 doStepLoadUrl();
+                m_stepRetryCount++;
             }
             else
             {
-                emit collectLog(QString::fromWCharArray(L"采集失败：加载链接失败"));
+                QString log = QString::fromWCharArray(L"链接%1采集失败：加载链接失败").arg(m_dataModel.m_id);
+                emit collectLog(log);
                 emit runFinish(false);
             }
         }
@@ -265,14 +292,16 @@ void CollectorBase::onStepTimeout()
 
     if (m_currentStep == STEP_LOADURL)
     {
-        if (m_stepRetryCount < 1)
+        if (m_stepRetryCount < 1) // 重试一次
         {
             emit collectLog(QString::fromWCharArray(L"加载链接超时，重试"));
             doStepLoadUrl();
+            m_stepRetryCount++;
         }
         else
         {
-            emit collectLog(QString::fromWCharArray(L"采集失败：加载链接超时"));
+            QString log = QString::fromWCharArray(L"链接%1采集失败：加载链接超时").arg(m_dataModel.m_id);
+            emit collectLog(log);
             emit runFinish(false);
         }
     }

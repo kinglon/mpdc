@@ -27,11 +27,14 @@ public:
     // 加载网页
     void load(const QUrl& url);
 
+    // 获取当前页面url
+    QString getUrl();
+
     // 截图
     bool captrueImage(const QString& savePath);
 
     // 执行JS脚本
-    void runJsCode(const QString& jsCode);
+    void runJsCode(const QString& jsCode);    
 
 signals:
     // 加载网页完成

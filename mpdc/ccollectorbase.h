@@ -28,8 +28,11 @@ public:
     // 获取数据模型对象
     DataModel& getDataModel() { return m_dataModel;}
 
-    // 设置数据保存文件夹名字
-    void setDataSaveFolder(QString folderName) { m_dataSaveFolderName = folderName; }
+    // 设置采集计划的名字
+    void setPlanName(QString planName) { m_planName = planName; }
+
+    // 获取采集结果保存的路径
+    static QString getCollectResultSavePath(QString planName);
 
     // 运行
     void run();
@@ -87,7 +90,7 @@ protected:
 protected:
     DataModel m_dataModel;
 
-    QString m_dataSaveFolderName;
+    QString m_planName;
 
     // 当前采集步骤
     int m_currentStep = STEP_INIT;

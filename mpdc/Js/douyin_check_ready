@@ -1,9 +1,10 @@
 var jsResult = {};
 jsResult['fun'] = 'check_ready';
 jsResult['ready'] = '0' // 0 not ready, 1 ready, 2 video not exist
-if (location.href.toLowerCase().includes("recommend"))
+var error_pages = document.getElementsByClassName('QhoZcjgq')
+if (error_pages.length > 0 && error_pages[0].style.display !== 'none')
 {
-    jsResult['ready'] = '2';
+    jsResult['ready'] = '2'
 }
 else
 {

@@ -145,12 +145,12 @@ void DouyinCollector::doStepWaitReady()
 {
     m_waitReadyTimer = new QTimer(this);
     connect(m_waitReadyTimer, &QTimer::timeout, this, &DouyinCollector::onWaitReadyTimer);
-    m_waitReadyTimer->setInterval(3000);
+    m_waitReadyTimer->setInterval(2000);
     m_waitReadyTimer->start();
 }
 
 void DouyinCollector::doStepCaptureImage()
-{
+{   
     // 先关闭登录窗口
     if (!runJsCodeFile("douyin_close_login_window"))
     {

@@ -31,6 +31,11 @@ void BrowserWindow::load(const QUrl& url)
     m_webView->load(url);
 }
 
+QString BrowserWindow::getUrl()
+{
+    return m_webView->page()->url().toString();
+}
+
 bool BrowserWindow::captrueImage(const QString& savePath)
 {
     // 如果最小化就最大化展示，因为最小化时捕获不到图片

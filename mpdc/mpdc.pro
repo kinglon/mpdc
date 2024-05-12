@@ -18,6 +18,7 @@ SOURCES += \
     browserwindow.cpp \
     ccollectorbase.cpp \
     collectorfactory.cpp \
+    collectstatusmanager.cpp \
     datamodel.cpp \
     debugdialog.cpp \
     douyincollector.cpp \
@@ -36,6 +37,7 @@ HEADERS += \
     browserwindow.h \
     ccollectorbase.h \
     collectorfactory.h \
+    collectstatusmanager.h \
     datamodel.h \
     debugdialog.h \
     douyincollector.h \

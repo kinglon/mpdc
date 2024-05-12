@@ -1,4 +1,4 @@
-﻿#include "SettingManager.h"
+﻿#include "settingmanager.h"
 #include <QFile>
 #include "Utility/ImPath.h"
 #include "Utility/ImCharset.h"
@@ -32,13 +32,28 @@ void CSettingManager::Load()
 
     QJsonDocument jsonDocument = QJsonDocument::fromJson(jsonData);
     QJsonObject root = jsonDocument.object();
-    m_nLogLevel = root["log_level"].toInt();    
+    if (root.contains("log_level"))
+    {
+        m_nLogLevel = root["log_level"].toInt();
+    }
+
+    if (root.contains("enable_webview_log"))
+    {
+        m_enableWebviewLog = root["enable_webview_log"].toInt();
+    }
+
+    if (root.contains("cache_jscode"))
+    {
+        m_cacheJsCode = root["cache_jscode"].toInt();
+    }
 }
 
 void CSettingManager::Save()
 {
     QJsonObject root;
-    root["log_level"] = m_nLogLevel;    
+    root["log_level"] = m_nLogLevel;
+    root["enable_webview_log"] = m_enableWebviewLog;
+    root["cache_jscode"] = m_cacheJsCode;
 
     QJsonDocument jsonDocument(root);
     QByteArray jsonData = jsonDocument.toJson(QJsonDocument::Indented);
