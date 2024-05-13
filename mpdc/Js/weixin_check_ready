@@ -1,0 +1,22 @@
+var jsResult = {};
+jsResult['fun'] = 'check_ready';
+jsResult['ready'] = '0'; // 0 not ready, 1 ready, 2 invalid link
+var publish_time = document.getElementById('publish_time');
+if (publish_time)
+{
+    jsResult['ready'] = '1';
+}
+else
+{
+    warnings = document.getElementsByClassName('weui-msg__title warn');
+    if (warnings.length > 0 && warnings[0].style.display !== 'none')
+    {
+        jsResult['ready'] = '2';
+    }
+    error = document.getElementById('js_title')
+    if (error && error.textContent.indexOf('错误') != -1)
+    {
+        jsResult['ready'] = '2';
+    }
+}
+jsResult;

@@ -93,7 +93,7 @@ void DouyinCollector::onSubClassLoadUrlFinished(bool ok)
     }
 }
 
-bool DouyinCollector::isReady(const QMap<QString, QString>& result, bool& hasVideo)
+bool DouyinCollector::isReady(const QMap<QString, QString>& result, bool& validLink)
 {
     QString fun;
     if (result.contains("fun"))
@@ -112,12 +112,12 @@ bool DouyinCollector::isReady(const QMap<QString, QString>& result, bool& hasVid
         {
             if (result["ready"] == "1") // 就绪
             {
-                hasVideo = true;
+                validLink = true;
                 return true;
             }
             else if (result["ready"] == "2") // 没有视频
             {
-                hasVideo = false;
+                validLink = false;
                 return true;
             }
         }

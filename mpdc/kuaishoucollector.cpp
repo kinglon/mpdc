@@ -99,7 +99,7 @@ void KuaiShouCollector::onSubClassLoadUrlFinished(bool ok)
     }
 }
 
-bool KuaiShouCollector::isReady(const QMap<QString, QString>& result, bool& hasVideo)
+bool KuaiShouCollector::isReady(const QMap<QString, QString>& result, bool& validLink)
 {
     QString fun;
     if (result.contains("fun"))
@@ -118,12 +118,12 @@ bool KuaiShouCollector::isReady(const QMap<QString, QString>& result, bool& hasV
         {
             if (result["ready"] == "1") // 就绪
             {
-                hasVideo = true;
+                validLink = true;
                 return true;
             }
             else if (result["ready"] == "2") // 没有视频
             {
-                hasVideo = false;
+                validLink = false;
                 return true;
             }
         }

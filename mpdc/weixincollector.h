@@ -1,18 +1,18 @@
-﻿#ifndef WEIBOCOLLECTOR_H
-#define WEIBOCOLLECTOR_H
+﻿#ifndef WEIXINCOLLECTOR_H
+#define WEIXINCOLLECTOR_H
 
 #include "ccollectorbase.h"
 #include <QTimer>
 
-class WeiboCollector : public CollectorBase
+class WeixinCollector : public CollectorBase
 {
 public:
-    explicit WeiboCollector(QObject *parent = nullptr);
+    explicit WeixinCollector(QObject *parent = nullptr);
 
 protected:
     virtual void runJsCodeFinish(bool ok, const QMap<QString, QString>& result) override;
 
-    virtual QString getWaitReadyJsFile() override { return "weibo_check_ready"; }
+    virtual QString getWaitReadyJsFile() override { return "weixin_check_ready"; }
 
     virtual bool isReady(const QMap<QString, QString>& result, bool& validLink) override;
 
@@ -27,4 +27,4 @@ private:
     int m_collectingDataRetryCount = 0;
 };
 
-#endif // WEIBOCOLLECTOR_H
+#endif // WEIXINCOLLECTOR_H

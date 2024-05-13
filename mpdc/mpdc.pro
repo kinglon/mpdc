@@ -26,7 +26,8 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     settingmanager.cpp \
-    weibocollector.cpp
+    weibocollector.cpp \
+    weixincollector.cpp
 
 HEADERS += \
     Utility/DumpUtil.h \
@@ -46,7 +47,8 @@ HEADERS += \
     kuaishoucollector.h \
     mainwindow.h \
     settingmanager.h \
-    weibocollector.h
+    weibocollector.h \
+    weixincollector.h
 
 FORMS += \
     browserwindow.ui \

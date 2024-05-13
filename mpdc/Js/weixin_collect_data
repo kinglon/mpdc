@@ -1,0 +1,25 @@
+var jsResult = {};
+jsResult['fun'] = 'collect_data';
+jsResult['title'] = document.title;
+var userinfo = document.getElementById("js_profile_qrcode");
+if (userinfo)
+{
+    var nickNames = userinfo.getElementsByClassName('profile_nickname');
+    if (nickNames.length > 0)
+    {
+        jsResult['nickName'] = nickNames[0].textContent;
+    }
+    var profile_metas = userinfo.getElementsByClassName('profile_meta');
+    for (profile_meta of profile_metas)
+    {
+        if (profile_meta.children.length >= 2)
+        {
+            if (profile_meta.children[0].textContent == '微信号')
+            {
+                jsResult['id'] = profile_meta.children[1].textContent;
+                break;
+            }
+        }
+    }
+}
+jsResult;

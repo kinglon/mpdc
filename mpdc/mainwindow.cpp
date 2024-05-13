@@ -318,7 +318,7 @@ void MainWindow::onCollectNextTask()
     collector->getDataModel().m_link = link;
     collector->setPlanName(CollectStatusManager::getInstance()->getPlanName());
     connect(collector, &CollectorBase::runFinish, [collector, this](bool ok) {
-        if (ok || collector->getCollectError() == COLLECT_ERROR_NOT_HAVE_VIDEO)
+        if (ok || collector->getCollectError() == COLLECT_ERROR_INVALID_LINK)
         {
             finishCurrentTask(collector->getDataModel());
         }

@@ -1,6 +1,6 @@
 var jsResult = {};
 jsResult['fun'] = 'check_ready';
-jsResult['ready'] = '0'; // 0 not ready, 1 ready, 2 video not exist
+jsResult['ready'] = '0'; // 0 not ready, 1 ready, 2 invalid link
 var contents = document.getElementsByClassName('Feed_body_3R0rO');
 if (contents.length > 0)
 {
@@ -8,6 +8,14 @@ if (contents.length > 0)
     if (times.length > 0)
     {
         jsResult['ready'] = '1';
+    }
+}
+else
+{
+    tips = document.getElementsByClassName('woo-tip-text');
+    if (tips.length > 0 && tips[0].textContent.indexOf('不存在') != -1)
+    {
+        jsResult['ready'] = '2';
     }
 }
 jsResult;

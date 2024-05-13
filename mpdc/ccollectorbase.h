@@ -16,7 +16,7 @@
 
 // 采集失败原因
 #define COLLECT_ERROR                   1
-#define COLLECT_ERROR_NOT_HAVE_VIDEO    2  // 视频不存在
+#define COLLECT_ERROR_INVALID_LINK      2  // 无效链接
 #define COLLECT_ERROR_NOT_LOGIN         3  // 未登录
 
 class CollectorBase : public QObject
@@ -75,9 +75,9 @@ protected:
 
     // 检查是否已准备就绪
     // result, JS代码运行的结果
-    // hasVideo, 标志是否有视频
-    // return， true表示结束，如果有视频继续，没有视频就失败
-    virtual bool isReady(const QMap<QString, QString>& result, bool& hasVideo) = 0;
+    // validLink, 标志是否未有效链接
+    // return， true表示就绪，就绪结果要看validLink
+    virtual bool isReady(const QMap<QString, QString>& result, bool& validLink) = 0;
 
     // 获取截图保存路径
     QString getCaptureImageSavePath();

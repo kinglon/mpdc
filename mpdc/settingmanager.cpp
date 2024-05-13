@@ -32,38 +32,9 @@ void CSettingManager::Load()
 
     QJsonDocument jsonDocument = QJsonDocument::fromJson(jsonData);
     QJsonObject root = jsonDocument.object();
-    if (root.contains("log_level"))
-    {
-        m_nLogLevel = root["log_level"].toInt();
-    }
-
-    if (root.contains("enable_webview_log"))
-    {
-        m_enableWebviewLog = root["enable_webview_log"].toInt();
-    }
-
-    if (root.contains("cache_jscode"))
-    {
-        m_cacheJsCode = root["cache_jscode"].toInt();
-    }
-}
-
-void CSettingManager::Save()
-{
-    QJsonObject root;
-    root["log_level"] = m_nLogLevel;
-    root["enable_webview_log"] = m_enableWebviewLog;
-    root["cache_jscode"] = m_cacheJsCode;
-
-    QJsonDocument jsonDocument(root);
-    QByteArray jsonData = jsonDocument.toJson(QJsonDocument::Indented);
-    std::wstring strConfFilePath = CImPath::GetConfPath() + L"configs.json";
-    QFile file(QString::fromStdWString(strConfFilePath));
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
-    {
-        LOG_ERROR(L"failed to open the basic configure file : %s", strConfFilePath.c_str());
-        return;
-    }
-    file.write(jsonData);
-    file.close();
+    m_nLogLevel = root["log_level"].toInt();
+    m_enableWebviewLog = root["enable_webview_log"].toInt();
+    m_cacheJsCode = root["cache_jscode"].toInt();
+    m_browserWidth = root["browser_width"].toInt();
+    m_browserHeight = root["browser_height"].toInt();
 }

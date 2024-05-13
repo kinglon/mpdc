@@ -11,9 +11,6 @@ protected:
 public:
 	static CSettingManager* GetInstance();
 
-public:
-    void Save();
-
 private:
 	void Load();
 
@@ -25,4 +22,8 @@ public:
 
     // 标志是否要缓存JS代码，false会实时从本地文件加载
     bool m_cacheJsCode = true;
+
+    // 浏览器宽高
+    int m_browserWidth = 1920;
+    int m_browserHeight = 1080;
 };

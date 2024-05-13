@@ -1,16 +1,16 @@
-﻿#include "weibocollector.h"
+﻿#include "weixincollector.h"
 #include "browserwindow.h"
 
 // 采集数据重传最大次数
 #define MAX_COLLECT_DATA_RETRY_COUNT  5
 
-WeiboCollector::WeiboCollector(QObject *parent)
+WeixinCollector::WeixinCollector(QObject *parent)
     : CollectorBase{parent}
 {
 
 }
 
-void WeiboCollector::runJsCodeFinish(bool ok, const QMap<QString, QString>& result)
+void WeixinCollector::runJsCodeFinish(bool ok, const QMap<QString, QString>& result)
 {
     __super::runJsCodeFinish(ok, result);
 
@@ -52,14 +52,14 @@ void WeiboCollector::runJsCodeFinish(bool ok, const QMap<QString, QString>& resu
             m_dataModel.m_fanCount = result["fanCount"];
         }
 
-        if (!m_dataModel.m_fanCount.isEmpty())
+        if (!m_dataModel.m_userId.isEmpty())
         {
             collectDataCompletely(true);
         }
     }
 }
 
-bool WeiboCollector::isReady(const QMap<QString, QString>& result, bool& validLink)
+bool WeixinCollector::isReady(const QMap<QString, QString>& result, bool& validLink)
 {
     QString fun;
     if (result.contains("fun"))
@@ -81,7 +81,7 @@ bool WeiboCollector::isReady(const QMap<QString, QString>& result, bool& validLi
                 validLink = true;
                 return true;
             }
-            else if (result["ready"] == "2") // 无效链接
+            else if (result["ready"] == "2") // 内容不存在
             {
                 validLink = false;
                 return true;
@@ -92,7 +92,7 @@ bool WeiboCollector::isReady(const QMap<QString, QString>& result, bool& validLi
     return false;
 }
 
-void WeiboCollector::doStepCollectData()
+void WeixinCollector::doStepCollectData()
 {
     m_collectDataTimer = new QTimer(this);
     connect(m_collectDataTimer, &QTimer::timeout, [this]() {
@@ -102,14 +102,14 @@ void WeiboCollector::doStepCollectData()
             return;
         }
 
-        runJsCodeFile("weibo_collect_data");
+        runJsCodeFile("weixin_collect_data");
         m_collectingDataRetryCount++;
     });
     m_collectDataTimer->setInterval(2000);
     m_collectDataTimer->start();
 }
 
-void WeiboCollector::collectDataCompletely(bool ok)
+void WeixinCollector::collectDataCompletely(bool ok)
 {
     m_collectDataTimer->stop();
     m_collectDataTimer->deleteLater();

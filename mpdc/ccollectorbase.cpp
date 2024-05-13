@@ -126,16 +126,16 @@ void CollectorBase::runJsCodeFinish(bool ok, const QMap<QString, QString>& resul
 {
     if (m_currentStep == STEP_WAIT_READY)
     {
-        bool hasVideo = true;
-        if (ok && isReady(result, hasVideo))
+        bool validLink = true;
+        if (ok && isReady(result, validLink))
         {
-            if (hasVideo)
+            if (validLink)
             {
                 stepWaitReadyFinish(true);
             }
             else
             {
-                m_collectError = COLLECT_ERROR_NOT_HAVE_VIDEO;
+                m_collectError = COLLECT_ERROR_INVALID_LINK;
                 stepWaitReadyFinish(false);
             }
         }
@@ -223,9 +223,9 @@ void CollectorBase::stepWaitReadyFinish(bool ok)
 {
     if (!ok)
     {
-        if (m_collectError == COLLECT_ERROR_NOT_HAVE_VIDEO)
+        if (m_collectError == COLLECT_ERROR_INVALID_LINK)
         {
-            QString log = QString::fromWCharArray(L"链接%1采集失败：视频不存在").arg(m_dataModel.m_id);
+            QString log = QString::fromWCharArray(L"链接%1采集失败：无效链接").arg(m_dataModel.m_id);
             emit collectLog(log);
         }
         else
