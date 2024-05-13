@@ -1,0 +1,13 @@
+var jsResult = {};
+jsResult['fun'] = 'check_ready';
+jsResult['ready'] = '0'; // 0 not ready, 1 ready, 2 video not exist
+var contents = document.getElementsByClassName('Feed_body_3R0rO');
+if (contents.length > 0)
+{
+    var times = contents[0].getElementsByClassName('head-info_time_6sFQg');
+    if (times.length > 0)
+    {
+        jsResult['ready'] = '1';
+    }
+}
+jsResult;

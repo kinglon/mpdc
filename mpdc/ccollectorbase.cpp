@@ -302,7 +302,6 @@ void CollectorBase::onLoadUrlFinished(bool ok)
         QString currentUrl = BrowserWindow::getInstance()->getUrl();
         if (currentUrl.indexOf(m_dataModel.m_link) == -1)
         {
-            qInfo("ignore the jump url: %s", currentUrl.toStdString().c_str());
             return;
         }
 

@@ -1,0 +1,29 @@
+var jsResult = {};
+jsResult['fun'] = 'collect_data';
+jsResult['title'] = document.title;
+var userinfos = document.getElementsByClassName("cardProfile_hide_26yla");
+if (userinfos.length > 0 && userinfos[0].children.length >= 3)
+{
+    var nickName = userinfos[0].children[1];
+    jsResult['nickName'] = nickName.textContent;
+    var fanCount = userinfos[0].children[2]
+    if (fanCount.children.length >= 2)
+    {
+        fanCount = fanCount.children[1]
+        var fanCounts = fanCount.getElementsByClassName("cla")
+        if (fanCounts.length > 0 && fanCounts[0].children.length > 0)
+        {
+            jsResult['fanCount'] = fanCounts[0].children[0].textContent;
+        }
+        var ids = fanCount.getElementsByTagName("a");
+        if (ids.length > 0)
+        {
+            ids = ids[0].href.match(/\d+/);
+            if (ids.length > 0)
+            {
+                jsResult['id'] = ids[0];
+            }            
+        }
+    }
+}
+jsResult;
