@@ -32,18 +32,22 @@ void DouyinCollector::runJsCodeFinish(bool ok, const QMap<QString, QString>& res
     {
         if (!m_hasCaptured || (result.contains("login_window_visible") && result["login_window_visible"] == "1"))
         {
-            m_hasCaptured = true;
-            QString imageSavePath = getCaptureImageSavePath();
-            bool ok = BrowserWindow::getInstance()->captrueImage(imageSavePath);
-            if (!ok)
-            {
-                captureImageCompletely(false);
-            }
-            else
-            {
-                // 继续查询登录窗口是否显示，如果显示要关闭再次截图
-                runJsCodeFile("douyin_close_login_window");
-            }
+            // 关闭登录窗口后过一会再截图，否则界面上还会有登录窗口
+            QTimer::singleShot(1000, [this]() {
+                QString imageSavePath = getCaptureImageSavePath();
+                bool ok = BrowserWindow::getInstance()->captrueImage(imageSavePath);
+                if (!ok)
+                {
+                    captureImageCompletely(false);
+                }
+                else
+                {
+                    m_hasCaptured = true;
+
+                    // 继续查询登录窗口是否显示，如果显示要关闭再次截图
+                    runJsCodeFile("douyin_close_login_window");
+                }
+            });
         }
         else
         {
@@ -69,11 +73,17 @@ void DouyinCollector::runJsCodeFinish(bool ok, const QMap<QString, QString>& res
     }
     else if (fun == "get_id")
     {
-        if (result.contains("id"))
+        if (result.contains("id") && !result["id"].isEmpty())
         {
             m_dataModel.m_userId = result["id"];
+            collectDataCompletely(true);
         }
-        collectDataCompletely(true);
+        else
+        {
+            QTimer::singleShot(1000, [this]() {
+                runJsCodeFile("douyin_get_id");
+            });
+        }
     }
 }
 

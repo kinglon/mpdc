@@ -83,7 +83,7 @@ void MainWindow::updateCollectBtns()
     }
     ui->collectBtn->setEnabled(!m_isCollecting);
 
-    ui->stopCollectBtn->setEnabled(CollectStatusManager::getInstance()->hasTaskCollecting());
+    ui->stopCollectBtn->setEnabled(CollectStatusManager::getInstance()->hasTaskCollecting() && !m_isCollecting);
     ui->loginKuaiShouBtn->setEnabled(!m_isCollecting);
 }
 
