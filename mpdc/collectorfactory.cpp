@@ -3,6 +3,7 @@
 #include "kuaishoucollector.h"
 #include "weibocollector.h"
 #include "weixincollector.h"
+#include "toutiaocollector.h"
 
 CollectorFactory::CollectorFactory()
 {
@@ -27,6 +28,10 @@ CollectorBase* CollectorFactory::createCollector(const QString& link)
     else if (link.contains("mp.weixin.qq.com"))
     {
         collector = new WeixinCollector();
+    }
+    else if (link.contains("toutiao.com"))
+    {
+        collector = new ToutiaoCollector();
     }
 
     return collector;

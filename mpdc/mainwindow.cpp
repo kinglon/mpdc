@@ -111,6 +111,9 @@ void MainWindow::onSelectPathBtnClicked(bool )
 
 void MainWindow::onStopCollectBtnClicked(bool )
 {
+    m_isCollecting = false;
+    updateCollectBtns();
+
     // 保存采集结果并打开保存目录
     if (!saveCollectResult())
     {
@@ -122,7 +125,6 @@ void MainWindow::onStopCollectBtnClicked(bool )
     QDesktopServices::openUrl(QUrl::fromLocalFile(savePath));
 
     CollectStatusManager::getInstance()->reset();
-    m_isCollecting = false;
     updateCollectBtns();
 }
 
@@ -252,13 +254,14 @@ bool MainWindow::saveCollectResult()
     int row = 2;
     for (const auto& data : datas)
     {
-        if (!data.m_userId.isEmpty())
+        if (!data.m_nickName.isEmpty())
         {
             xlsx.write(row, 1, data.m_id);
             xlsx.write(row, 2, data.m_title);
-            xlsx.write(row, 3, data.m_userId);
-            xlsx.write(row, 4, data.m_nickName);
-            xlsx.write(row, 5, data.m_fanCount);
+            xlsx.write(row, 3, data.m_link);
+            xlsx.write(row, 4, data.m_userId);
+            xlsx.write(row, 5, data.m_nickName);
+            xlsx.write(row, 6, data.m_fanCount);
             row++;
         }
     }

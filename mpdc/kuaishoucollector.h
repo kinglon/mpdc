@@ -16,8 +16,6 @@ protected:
 
     virtual QString getWaitReadyJsFile() override { return "kuaishou_check_ready"; }
 
-    virtual bool isReady(const QMap<QString, QString>& result, bool& validLink) override;
-
     virtual void doStepCollectData() override;
 
 private:

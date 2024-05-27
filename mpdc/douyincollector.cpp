@@ -103,39 +103,6 @@ void DouyinCollector::onSubClassLoadUrlFinished(bool ok)
     }
 }
 
-bool DouyinCollector::isReady(const QMap<QString, QString>& result, bool& validLink)
-{
-    QString fun;
-    if (result.contains("fun"))
-    {
-        fun = result["fun"];
-    }
-    if (fun.isEmpty())
-    {
-        qCritical("js result not have fun");
-        return false;
-    }
-
-    if (fun == "check_ready")
-    {
-        if (result.contains("ready"))
-        {
-            if (result["ready"] == "1") // 就绪
-            {
-                validLink = true;
-                return true;
-            }
-            else if (result["ready"] == "2") // 没有视频
-            {
-                validLink = false;
-                return true;
-            }
-        }
-    }
-
-    return false;
-}
-
 void DouyinCollector::doStepCaptureImage()
 {   
     // 先关闭登录窗口

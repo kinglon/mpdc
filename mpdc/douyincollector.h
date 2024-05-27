@@ -16,8 +16,6 @@ protected:
 
     virtual QString getWaitReadyJsFile() override { return "douyin_check_ready"; }
 
-    virtual bool isReady(const QMap<QString, QString>& result, bool& validLink) override;
-
     virtual void doStepCaptureImage() override;
 
     virtual void doStepCollectData() override;

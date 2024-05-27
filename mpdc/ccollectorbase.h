@@ -77,7 +77,7 @@ protected:
     // result, JS代码运行的结果
     // validLink, 标志是否未有效链接
     // return， true表示就绪，就绪结果要看validLink
-    virtual bool isReady(const QMap<QString, QString>& result, bool& validLink) = 0;
+    virtual bool isReady(const QMap<QString, QString>& result, bool& validLink);
 
     // 获取截图保存路径
     QString getCaptureImageSavePath();

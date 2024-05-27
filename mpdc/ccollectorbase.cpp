@@ -195,6 +195,39 @@ void CollectorBase::onRunJsCodeTimeout()
     runJsCodeFinish(false, QMap<QString, QString>());
 }
 
+bool CollectorBase::isReady(const QMap<QString, QString>& result, bool& validLink)
+{
+    QString fun;
+    if (result.contains("fun"))
+    {
+        fun = result["fun"];
+    }
+    if (fun.isEmpty())
+    {
+        qCritical("js result not have fun");
+        return false;
+    }
+
+    if (fun == "check_ready")
+    {
+        if (result.contains("ready"))
+        {
+            if (result["ready"] == "1") // 就绪
+            {
+                validLink = true;
+                return true;
+            }
+            else if (result["ready"] == "2") // 无效链接
+            {
+                validLink = false;
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 QString CollectorBase::getCaptureImageSavePath()
 {    
     return getCollectResultSavePath(m_planName) + m_dataModel.m_id + ".png";

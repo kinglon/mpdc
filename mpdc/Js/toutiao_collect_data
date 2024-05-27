@@ -1,0 +1,14 @@
+var jsResult = {};
+jsResult['fun'] = 'collect_data';
+jsResult['title'] = document.title.split('_')[0];
+var authorInfos = document.getElementsByClassName('author-info')
+if (authorInfos.length > 0)
+{
+    var nickNames = authorInfos[0].getElementsByClassName('name')
+    if (nickNames.length > 0)
+    {
+        jsResult['nickName'] = nickNames[0].textContent;
+        nickNames[0].click();
+    }
+}
+jsResult;

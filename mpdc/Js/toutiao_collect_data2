@@ -1,0 +1,32 @@
+var jsResult = {};
+jsResult['fun'] = 'collect_data2';
+var relationStats = document.getElementsByClassName('relation-stat');
+if (relationStats.length > 0 && relationStats[0].children.length >= 3)
+{
+    var loveCount = '0'
+    var loveElement = relationStats[0].children[0];
+    if (loveElement.children.length > 0)
+    {
+        loveCount = loveElement.children[0].textContent;
+    }
+    
+    var fanCount = '0'
+    var fanElement = relationStats[0].children[1];
+    if (fanElement.children.length > 0)
+    {
+        fanCount = fanElement.children[0].textContent;
+    }
+    
+    var followerCount = '0'
+    var followerElement = relationStats[0].children[2];
+    if (followerElement.children.length > 0)
+    {
+        followerCount = followerElement.children[0].textContent;
+    }
+    
+    if (loveCount != '0' || fanCount != '0' || followerCount != '0')
+    {
+        jsResult['fanCount'] = fanCount;
+    }
+}
+jsResult;

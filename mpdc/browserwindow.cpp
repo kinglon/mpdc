@@ -15,7 +15,7 @@ void WebEnginePage::onUrlChanged(const QUrl & url)
 {
     if (WebEnginePage *page = qobject_cast<WebEnginePage *>(sender()))
     {
-        load(url);
+        BrowserWindow::getInstance()->load(url);
         page->deleteLater();
     }
 }
@@ -45,6 +45,7 @@ BrowserWindow* BrowserWindow::getInstance()
 
 void BrowserWindow::load(const QUrl& url)
 {
+    qInfo("load url: %s", url.toString().toStdString().c_str());
     m_webView->load(url);
 }
 
@@ -86,6 +87,7 @@ void BrowserWindow::runJsCode(const QString& jsCode)
 
 void BrowserWindow::onLoadFinished(bool ok)
 {
+    qInfo("finish to load url: %s, result: %s", getUrl().toStdString().c_str(), ok?"success":"failed");
     emit loadFinished(ok);
 }
 

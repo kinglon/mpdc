@@ -59,39 +59,6 @@ void WeixinCollector::runJsCodeFinish(bool ok, const QMap<QString, QString>& res
     }
 }
 
-bool WeixinCollector::isReady(const QMap<QString, QString>& result, bool& validLink)
-{
-    QString fun;
-    if (result.contains("fun"))
-    {
-        fun = result["fun"];
-    }
-    if (fun.isEmpty())
-    {
-        qCritical("js result not have fun");
-        return false;
-    }
-
-    if (fun == "check_ready")
-    {
-        if (result.contains("ready"))
-        {
-            if (result["ready"] == "1") // 就绪
-            {
-                validLink = true;
-                return true;
-            }
-            else if (result["ready"] == "2") // 内容不存在
-            {
-                validLink = false;
-                return true;
-            }
-        }
-    }
-
-    return false;
-}
-
 void WeixinCollector::doStepCollectData()
 {
     m_collectDataTimer = new QTimer(this);

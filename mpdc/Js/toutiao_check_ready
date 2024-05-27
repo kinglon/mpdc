@@ -1,0 +1,17 @@
+var jsResult = {};
+jsResult['fun'] = 'check_ready';
+jsResult['ready'] = '0' // 0 not ready, 1 ready, 2 invalid link
+var authorInfos = document.getElementsByClassName('author-info')
+if (authorInfos.length > 0)
+{
+    jsResult['ready'] = '1'
+}
+else
+{
+    var errorTips = document.getElementsByClassName('error-tips')
+    if (errorTips.length > 0 && errorTips[0].textContent.indexOf('内容不存在') != -1)
+    {
+        jsResult['ready'] = '2'
+    }
+}
+jsResult;

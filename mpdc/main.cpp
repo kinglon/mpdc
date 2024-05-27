@@ -32,7 +32,10 @@ void logToFile(QtMsgType type, const QMessageLogContext &context, const QString 
         {
             logLevel = ELogLevel::LOG_LEVEL_INFO;
         }
-        g_dllLog->Log(context.file? context.file: "", context.line, logLevel, msg.toStdWString().c_str());
+
+        QString newMsg = msg;
+        newMsg.remove(QChar('%'));
+        g_dllLog->Log(context.file? context.file: "", context.line, logLevel, newMsg.toStdWString().c_str());
     }
 
     if (originalHandler)
