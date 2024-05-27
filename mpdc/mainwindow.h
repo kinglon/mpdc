@@ -77,5 +77,7 @@ private:
 
     // 标志采集器是否正在运行
     bool m_isCollecting = false;
+
+    RequestInterceptor* m_requestInterceptor = nullptr;
 };
 #endif // MAINWINDOW_H

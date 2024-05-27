@@ -4,8 +4,9 @@
 // 采集数据重传最大次数
 #define MAX_COLLECT_DATA_RETRY_COUNT  5
 
-KuaiShouCollector::KuaiShouCollector(QObject *parent)
-    : CollectorBase{parent}
+KuaiShouCollector::KuaiShouCollector(QString readyJsFileName, QString collectDataJsFileName,
+                                     QString secondCollectJsFile, QObject *parent)
+    : TwoTimeCollector(readyJsFileName, collectDataJsFileName, secondCollectJsFile, parent)
 {
 
 }
@@ -30,96 +31,12 @@ void KuaiShouCollector::runJsCodeFinish(bool ok, const QMap<QString, QString>& r
         return;
     }
 
-    if (fun == "collect_data")
+    if (fun == "collect_data2")
     {
-        if (result.contains("title"))
+        if (result.contains("login") && result["login"] == "0")
         {
-            m_dataModel.m_title = result["title"];
-        }
-
-        if (result.contains("nickName"))
-        {
-            m_dataModel.m_nickName = result["nickName"];
+            m_collectError = COLLECT_ERROR_NOT_LOGIN;
+            collectDataCompletely(false);
         }
     }
-    else if (fun == "collect_data2")
-    {
-        if (result.contains("id"))
-        {
-            m_dataModel.m_userId = result["id"];
-        }
-
-        if (result.contains("fanCount"))
-        {
-            m_dataModel.m_fanCount = result["fanCount"];
-        }
-
-        if (!m_dataModel.m_fanCount.isEmpty())
-        {
-            collectDataCompletely(true);
-        }
-        else
-        {
-            if (m_collectingDataRetryCount >= MAX_COLLECT_DATA_RETRY_COUNT)
-            {
-                if (result.contains("login") && result["login"] == "0")
-                {
-                    m_collectError = COLLECT_ERROR_NOT_LOGIN;
-                }
-                collectDataCompletely(false);
-            }
-            else
-            {
-                m_collectDataTimer->stop();
-                m_collectDataTimer->disconnect();
-                connect(m_collectDataTimer, &QTimer::timeout, [this]() {
-                    runJsCodeFile("kuaishou_collect_data2");
-                    m_collectingDataRetryCount++;
-                });
-                m_collectDataTimer->setInterval(2000);
-                m_collectDataTimer->start();
-            }
-        }
-    }
-}
-
-void KuaiShouCollector::onSubClassLoadUrlFinished(bool ok)
-{
-    if (m_currentStep == STEP_COLLECT_DATA)
-    {
-        if (ok)
-        {
-            // 页面跳转成功，可以去采集其他信息
-            if (!runJsCodeFile("kuaishou_collect_data2"))
-            {
-                collectDataCompletely(false);
-                return;
-            }
-        }
-    }
-}
-
-void KuaiShouCollector::doStepCollectData()
-{
-    if (!runJsCodeFile("kuaishou_collect_data"))
-    {
-        collectDataCompletely(false);
-        return;
-    }
-
-    m_collectDataTimer = new QTimer(this);
-    connect(m_collectDataTimer, &QTimer::timeout, [this]() {
-        qCritical("collecting data timeout");
-        collectDataCompletely(false);
-    });
-    m_collectDataTimer->setInterval(60000);
-    m_collectDataTimer->start();
-}
-
-void KuaiShouCollector::collectDataCompletely(bool ok)
-{
-    m_collectDataTimer->stop();
-    m_collectDataTimer->deleteLater();
-    m_collectDataTimer = nullptr;
-    stepCollectDataFinish(ok);
 }

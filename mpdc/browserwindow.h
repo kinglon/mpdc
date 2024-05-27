@@ -39,6 +39,9 @@ public:
     // 设置可以关闭退出
     void setCanClose() { m_canClose = true; }
 
+    // 设置webview大小
+    void setWebViewSize(QSize size);
+
     // 加载网页
     void load(const QUrl& url);
 
@@ -66,8 +69,6 @@ protected:
 
 private:
     QWebEngineView* m_webView = nullptr;
-
-    QSize m_webViewSize = QSize(1920, 1080);
 
     bool m_canClose = false;
 };

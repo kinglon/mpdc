@@ -1,14 +1,12 @@
 var jsResult = {};
 jsResult['fun'] = 'collect_data2';
-if (location.href.indexOf('profile') != -1)
-{
-    jsResult['id'] = location.href.substring(location.href.lastIndexOf("/") + 1);
-}
+
 var logins = document.getElementsByClassName('user-default')
 if (logins.length > 0 && logins[0].textContent.indexOf('登录') != -1)
 {
     jsResult['login'] = '0';
 }
+
 var userInfos = document.getElementsByClassName('user-detail-info');
 if (userInfos.length > 0)
 {    

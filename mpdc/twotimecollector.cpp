@@ -11,7 +11,7 @@ TwoTimeCollector::TwoTimeCollector(QString readyJsFileName, QString collectDataJ
     m_secondCollectJsFile = secondCollectJsFile;
 }
 
-void TwoTimeCollector::onSubClassLoadUrlFinished(bool ok)
+void TwoTimeCollector::onSubClassLoadUrlFinished(bool)
 {
     if (m_currentStep == STEP_COLLECT_DATA)
     {

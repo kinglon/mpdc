@@ -22,7 +22,7 @@ private slots:
 
     void onCaptureBtnlicked(bool checked);
 
-    void onEnableBtnlicked(bool checked);
+    void onChangeSizeBtnlicked(bool checked);
 
     void onRunJsCodeFinish(const QVariant& result);
 

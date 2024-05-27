@@ -68,9 +68,9 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="enableBtn">
+       <widget class="QPushButton" name="changeSizeBtn">
         <property name="text">
-         <string>设置可用</string>
+         <string>调整窗口大小</string>
         </property>
        </widget>
       </item>

@@ -16,7 +16,7 @@ DebugDialog::DebugDialog(QWidget *parent) :
     connect(ui->loadBtn, &QPushButton::clicked, this, &DebugDialog::onLoadBtnClicked);
     connect(ui->runJSBtn, &QPushButton::clicked, this, &DebugDialog::onRunJsBtnClicked);
     connect(ui->captureBtn, &QPushButton::clicked, this, &DebugDialog::onCaptureBtnlicked);
-    connect(ui->enableBtn, &QPushButton::clicked, this, &DebugDialog::onEnableBtnlicked);
+    connect(ui->changeSizeBtn, &QPushButton::clicked, this, &DebugDialog::onChangeSizeBtnlicked);
 
     connect(BrowserWindow::getInstance(), &BrowserWindow::runJsCodeFinished,
             this, &DebugDialog::onRunJsCodeFinish);
@@ -62,10 +62,10 @@ void DebugDialog::onCaptureBtnlicked(bool checked)
     QDesktopServices::openUrl(QUrl::fromLocalFile(qimageSavePath));
 }
 
-void DebugDialog::onEnableBtnlicked(bool checked)
+void DebugDialog::onChangeSizeBtnlicked(bool checked)
 {
     (void)checked;
-    BrowserWindow::getInstance()->setEnabled(true);
+    BrowserWindow::getInstance()->setWebViewSize(QSize(1200,650));
 }
 
 void DebugDialog::onRunJsCodeFinish(const QVariant& result)

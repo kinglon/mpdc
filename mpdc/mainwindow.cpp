@@ -14,6 +14,7 @@
 #include "xlsxrichstring.h"
 #include "xlsxworkbook.h"
 #include "Utility/ImPath.h"
+#include "settingmanager.h"
 
 using namespace QXlsx;
 
@@ -36,6 +37,8 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
+    m_requestInterceptor = new RequestInterceptor(this);
+
     m_ctrlDShortcut = new QShortcut(QKeySequence("Ctrl+D"), this);
     connect(m_ctrlDShortcut, &QShortcut::activated, this, &MainWindow::onCtrlDShortcut);
 
@@ -43,9 +46,12 @@ MainWindow::MainWindow(QWidget *parent)
     setWindowFlag(Qt::MSWindowsFixedSizeDialogHint, true);
 
     ui->setupUi(this);
-    initWindow();
+    initWindow();    
 
-    QWebEngineProfile::defaultProfile()->setRequestInterceptor(new RequestInterceptor(this));
+    QSize webviewSize;
+    webviewSize.setWidth(CSettingManager::GetInstance()->m_browserWidth);
+    webviewSize.setHeight(CSettingManager::GetInstance()->m_browserHeight);
+    BrowserWindow::getInstance()->setWebViewSize(webviewSize);
 
     // 异步调用
     connect(this, &MainWindow::collectNextTask, this, &MainWindow::onCollectNextTask, Qt::QueuedConnection);
@@ -81,7 +87,9 @@ void MainWindow::initWindow()
 
 void MainWindow::openLoginUrl(const QString& loginUrl)
 {
+    QWebEngineProfile::defaultProfile()->setRequestInterceptor(nullptr);
     BrowserWindow::getInstance()->setEnabled(true);
+    BrowserWindow::getInstance()->showMaximized();
     BrowserWindow::getInstance()->load(QUrl(loginUrl));
 }
 
@@ -181,7 +189,8 @@ void MainWindow::onCollectBtnClicked(bool )
     updateCollectBtns();
     ui->logEdit->setText("");
 
-    BrowserWindow::getInstance()->setEnabled(false);
+    QWebEngineProfile::defaultProfile()->setRequestInterceptor(m_requestInterceptor);
+    BrowserWindow::getInstance()->setEnabled(false);    
     BrowserWindow::getInstance()->showMaximized();
 
     onCollectNextTask();

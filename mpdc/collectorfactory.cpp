@@ -1,8 +1,7 @@
 ﻿#include "collectorfactory.h"
-#include "douyincollector.h"
-#include "kuaishoucollector.h"
 #include "simplecollector.h"
 #include "twotimecollector.h"
+#include "kuaishoucollector.h"
 
 CollectorFactory::CollectorFactory()
 {
@@ -14,11 +13,11 @@ CollectorBase* CollectorFactory::createCollector(const QString& link)
     CollectorBase* collector = nullptr;
     if (link.contains("www.douyin.com/video"))
     {
-        collector = new DouyinCollector();
+        collector = new TwoTimeCollector("douyin_check_ready", "douyin_collect_data", "douyin_collect_data2");
     }
     else if(link.contains("www.kuaishou.com/short-video"))
     {
-        collector = new KuaiShouCollector();
+        collector = new KuaiShouCollector("kuaishou_check_ready", "kuaishou_collect_data", "kuaishou_collect_data2");
     }
     else if (link.contains("weibo.com"))
     {

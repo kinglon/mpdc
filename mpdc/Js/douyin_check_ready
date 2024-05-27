@@ -8,8 +8,9 @@ if (error_pages.length > 0 && error_pages[0].style.display !== 'none')
 }
 else
 {
+    var hasLogin = document.getElementsByClassName('E33RhcjA').length > 0;
     var videos = document.getElementsByTagName('video');
-    if (videos.length > 0)
+    if (hasLogin && videos.length > 0)
     {
         if (!videos[0].paused && videos[0].currentTime >= 1)
         {

@@ -1,5 +1,5 @@
 var jsResult = {};
-jsResult['fun'] = 'get_id';
+jsResult['fun'] = 'collect_data2';
 var userInfos = document.getElementsByClassName('mZmVWLzR');
 if (userInfos.length > 0)
 {

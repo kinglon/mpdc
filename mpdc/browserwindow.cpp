@@ -27,7 +27,7 @@ BrowserWindow::BrowserWindow(QWidget *parent) :
     setEnabled(false);
     setWindowTitle(QString::fromStdWString(L"浏览器"));
     m_webView->setPage(new WebEnginePage(m_webView));
-    m_webView->resize(m_webViewSize);
+    m_webView->resize(QSize(1920,1080));
     setWindowState(windowState() | Qt::WindowMaximized);
     connect(m_webView->page(), &QWebEnginePage::loadFinished,this, &BrowserWindow::onLoadFinished);
 }
@@ -41,6 +41,11 @@ BrowserWindow* BrowserWindow::getInstance()
 {
     static BrowserWindow* instance = new BrowserWindow();
     return instance;
+}
+
+void BrowserWindow::setWebViewSize(QSize size)
+{
+    m_webView->resize(size);
 }
 
 void BrowserWindow::load(const QUrl& url)
