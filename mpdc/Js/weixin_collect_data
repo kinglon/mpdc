@@ -1,6 +1,12 @@
 var jsResult = {};
 jsResult['fun'] = 'collect_data';
-jsResult['title'] = document.title;
+
+var title = document.getElementById("activity-name");
+if (title)
+{
+    jsResult['title'] = title.textContent.trim();
+}
+
 var userinfo = document.getElementById("js_profile_qrcode");
 if (userinfo)
 {
@@ -22,4 +28,5 @@ if (userinfo)
         }
     }
 }
+
 jsResult;

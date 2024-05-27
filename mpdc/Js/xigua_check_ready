@@ -1,0 +1,21 @@
+var jsResult = {};
+jsResult['fun'] = 'check_ready';
+jsResult['ready'] = '0' // 0 not ready, 1 ready, 2 video not exist
+var error_pages = document.getElementsByClassName('page-404')
+if (error_pages.length > 0 && error_pages[0].style.display !== 'none')
+{
+    jsResult['ready'] = '2'
+}
+else
+{
+    var videos = document.getElementsByTagName('video');
+    if (videos.length > 0)
+    {
+        if (videos[0].readyState === 4)
+        {
+            videos[0].pause();
+            jsResult['ready'] = '1'
+        }
+    }
+}
+jsResult;

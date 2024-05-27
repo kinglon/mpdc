@@ -1,0 +1,17 @@
+var jsResult = {};
+jsResult['fun'] = 'collect_data';
+jsResult['title'] = document.title;
+
+var nickNames = document.getElementsByClassName('author__userName');
+if (nickNames.length > 0)
+{
+    jsResult['nickName'] = nickNames[0].getAttribute('title');    
+}
+
+var fanCounts = document.getElementsByClassName('author_statics');
+if (fanCounts.length > 0 && fanCounts[0].children.length > 0)    
+{
+    jsResult['fanCount'] = fanCounts[0].children[0].textContent;
+}
+
+jsResult;
