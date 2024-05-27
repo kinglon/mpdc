@@ -34,6 +34,20 @@
         </widget>
        </item>
        <item>
+        <widget class="QPushButton" name="loginDouyinBtn">
+         <property name="text">
+          <string>登录抖音</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="loginRedBookBtn">
+         <property name="text">
+          <string>登录小红书</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QPushButton" name="enableBrowserBtn">
          <property name="text">
           <string>设置浏览器可点击</string>

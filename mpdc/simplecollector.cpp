@@ -50,7 +50,10 @@ void SimpleCollector::runJsCodeFinish(bool ok, const QMap<QString, QString>& res
             m_dataModel.m_fanCount = result["fanCount"];
         }
 
-        collectDataCompletely(true);
+        if (!needCollectMoreData())
+        {
+            collectDataCompletely(true);
+        }
     }
 }
 
@@ -67,7 +70,7 @@ void SimpleCollector::doStepCollectData()
         qCritical("collecting data timeout");
         collectDataCompletely(false);
     });
-    m_collectDataTimer->setInterval(5000);
+    m_collectDataTimer->setInterval(20000);
     m_collectDataTimer->start();
 }
 

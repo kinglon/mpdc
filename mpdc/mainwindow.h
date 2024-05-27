@@ -35,6 +35,9 @@ public:
 private:
     void initWindow();
 
+    // 打开登录链接
+    void openLoginUrl(const QString& loginUrl);
+
     // 更新采集按钮的状态
     void updateCollectBtns();
 
@@ -47,8 +50,6 @@ private slots:
     void onStopCollectBtnClicked(bool checked=false);
 
     void onCollectBtnClicked(bool checked);
-
-    void onLoginKuaiShouBtnClicked(bool checked=false);
 
     void onCtrlDShortcut();
 

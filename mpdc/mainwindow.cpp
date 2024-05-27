@@ -60,7 +60,15 @@ MainWindow::~MainWindow()
 
 void MainWindow::initWindow()
 {
-    connect(ui->loginKuaiShouBtn, &QPushButton::clicked, this, &MainWindow::onLoginKuaiShouBtnClicked);
+    connect(ui->loginKuaiShouBtn, &QPushButton::clicked, [this]() {
+        openLoginUrl("https://www.kuaishou.com/");
+    });
+    connect(ui->loginDouyinBtn, &QPushButton::clicked, [this]() {
+        openLoginUrl("https://www.douyin.com/");
+    });
+    connect(ui->loginRedBookBtn, &QPushButton::clicked, [this]() {
+        openLoginUrl("https://www.xiaohongshu.com/explore");
+    });
     connect(ui->selectPathBtn, &QPushButton::clicked, this, &MainWindow::onSelectPathBtnClicked);
     connect(ui->collectBtn, &QPushButton::clicked, this, &MainWindow::onCollectBtnClicked);
     connect(ui->stopCollectBtn, &QPushButton::clicked, this, &MainWindow::onStopCollectBtnClicked);
@@ -69,6 +77,12 @@ void MainWindow::initWindow()
     });
 
     updateCollectBtns();
+}
+
+void MainWindow::openLoginUrl(const QString& loginUrl)
+{
+    BrowserWindow::getInstance()->setEnabled(true);
+    BrowserWindow::getInstance()->load(QUrl(loginUrl));
 }
 
 void MainWindow::updateCollectBtns()
@@ -85,6 +99,8 @@ void MainWindow::updateCollectBtns()
 
     ui->stopCollectBtn->setEnabled(CollectStatusManager::getInstance()->hasTaskCollecting() && !m_isCollecting);
     ui->loginKuaiShouBtn->setEnabled(!m_isCollecting);
+    ui->loginDouyinBtn->setEnabled(!m_isCollecting);
+    ui->loginRedBookBtn->setEnabled(!m_isCollecting);
 }
 
 void MainWindow::onSelectPathBtnClicked(bool )
@@ -169,12 +185,6 @@ void MainWindow::onCollectBtnClicked(bool )
     BrowserWindow::getInstance()->showMaximized();
 
     onCollectNextTask();
-}
-
-void MainWindow::onLoginKuaiShouBtnClicked(bool)
-{
-    BrowserWindow::getInstance()->setEnabled(true);
-    BrowserWindow::getInstance()->load(QUrl("https://www.kuaishou.com/"));
 }
 
 void MainWindow::onCtrlDShortcut()

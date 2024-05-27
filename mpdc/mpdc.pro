@@ -27,7 +27,7 @@ SOURCES += \
     mainwindow.cpp \
     settingmanager.cpp \
     simplecollector.cpp \
-    toutiaocollector.cpp
+    twotimecollector.cpp
 
 HEADERS += \
     Utility/DumpUtil.h \
@@ -48,7 +48,7 @@ HEADERS += \
     mainwindow.h \
     settingmanager.h \
     simplecollector.h \
-    toutiaocollector.h
+    twotimecollector.h
 
 FORMS += \
     browserwindow.ui \

@@ -1,10 +1,8 @@
 ﻿#include "collectorfactory.h"
 #include "douyincollector.h"
 #include "kuaishoucollector.h"
-#include "weibocollector.h"
-#include "weixincollector.h"
-#include "toutiaocollector.h"
 #include "simplecollector.h"
+#include "twotimecollector.h"
 
 CollectorFactory::CollectorFactory()
 {
@@ -32,11 +30,15 @@ CollectorBase* CollectorFactory::createCollector(const QString& link)
     }
     else if (link.contains("toutiao.com"))
     {
-        collector = new ToutiaoCollector();
+        collector = new TwoTimeCollector("toutiao_check_ready", "toutiao_collect_data", "toutiao_collect_data2");
     }
     else if (link.contains("ixigua.com"))
     {
         collector = new SimpleCollector("xigua_check_ready", "xigua_collect_data");
+    }
+    else if (link.contains("xiaohongshu.com"))
+    {
+        collector = new TwoTimeCollector("xiaohongshu_check_ready", "xiaohongshu_collect_data", "xiaohongshu_collect_data2");
     }
 
     return collector;

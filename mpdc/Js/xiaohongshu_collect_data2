@@ -1,0 +1,19 @@
+var jsResult = {};
+jsResult['fun'] = 'collect_data2';
+
+var ids = document.getElementsByClassName('user-redId');
+if (ids.length > 0)
+{    
+    jsResult['id'] = ids[0].textContent.split('：')[1];
+}
+
+var userInteractions= document.getElementsByClassName('user-interactions')
+if (userInteractions.length > 0 && userInteractions[0].children.length > 1)
+{
+    var fanElement = userInteractions[0].children[1];
+    if (fanElement.children.length > 0)
+    {
+        jsResult['fanCount'] = fanElement.children[0].textContent;
+    }
+}
+jsResult;

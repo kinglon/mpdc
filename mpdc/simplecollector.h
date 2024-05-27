@@ -4,6 +4,7 @@
 #include "ccollectorbase.h"
 #include <QTimer>
 
+// 加载链接准备就绪后，所有的数据采集都在当前网页上
 class SimpleCollector : public CollectorBase
 {
 public:
@@ -16,10 +17,13 @@ protected:
 
     virtual void doStepCollectData() override;
 
-private:
+    // 是否需要继续获取更多数据，如果不需要的话当前网页采集完后就结束
+    virtual bool needCollectMoreData() { return false; }
+
+protected:
     void collectDataCompletely(bool ok);
 
-private:
+protected:
     QString m_readyJsFileName;
 
     QString m_collectDataJsFileName;
